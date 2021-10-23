@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Vidly.Models.Movie>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Movies</h2>
+<p>
+<a href="~/Movies/New" class="btn btn-primary">New movie</a>
+</p>
+@{ /*if (Model.Count() > 0)
+    {*/
+        <table class="table table-bordered table-hover" id="movies">
+            <thead>
+                <tr>
+                    <th>Movies</th>
+                    <th>Genre</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--foreach (var m in Model)
+                {
+                <tr>
+                    <td>Html.ActionLink(m.Name, "About", "Movies", new { Id = m.Id }, null)</td>
+                    <td>m.GenreType.Name</td>
+                    <td>Html.ActionLink("Edit", "Edit", "Movies", new { Id = m.Id }, null)</td>
+                    <td>
+                        <button class="btn-link js-delete" id="m.Id">Delete</button>
+                    </td>
+                </tr>
+
+                }-->
+            </tbody>
+        </table>
+    /*}
+    else
+    {
+        <p>No movies in database</p>
+    }*/
+}
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            var table = $("#movies").DataTable({
+                ajax: {
+                    url: "/api/movies",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "name",
+                        render: function (data, type, movie) {
+                            return "<a href='/movies/about/" + movie.id + "'>" + data + "</a>";
+                        }
+                    },
+                    {
+                        data: "genreType.name"
+                    },
+                    {
+                        data: "id",
+                        render: function (data) {
+                            return "<a href='/movies/edit/" + data + "'>Edit</a>";
+                        }
+                    },
+                    {
+                        data: "id",
+                        render: function (data) {
+                            return "<button class='btn-link js-delete' id=" + data + ">Delete</button>";
+                        }
+                    }
+                ]
+            });
+            $(document).ready(function () {
+                $("#movies").on("click", ".js-delete", function () {
+                    var button = $(this);
+                    bootbox.confirm("Czy jestes pewien", function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: "/api/movies/" + button.attr("id"),
+                                method: "DELETE",
+                                success: function () {
+                                    table.row(button.parents("tr")).remove().draw();
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    } 
+

@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Vidly.Models.Movie>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Movies</h2>
+
+@{ /*if (Model.Count() > 0)
+    {*/
+        <table class="table table-bordered table-hover" id="movies">
+            <thead>
+                <tr>
+                    <th>Movies</th>
+                    <th>Genre</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--foreach (var m in Model)
+                {
+                <tr>
+                    <td>Html.ActionLink(m.Name, "About", "Movies", new { Id = m.Id }, null)</td>
+                    <td>m.GenreType.Name</td>
+                    <td>Html.ActionLink("Edit", "Edit", "Movies", new { Id = m.Id }, null)</td>
+                    <td>
+                        <button class="btn-link js-delete" id="m.Id">Delete</button>
+                    </td>
+                </tr>
+
+                }-->
+            </tbody>
+        </table>
+    /*}
+    else
+    {
+        <p>No movies in database</p>
+    }*/
+}
+
+@section scripts{
+    <script>
+        var table=$("#movies").DataTable({
+            ajax: {
+                url: "/api/movies/",
+                dataSrc:""
+            },
+            columns: [
+                {
+                    data: "name",
+                    render: function (data,type,movie) {
+                        return "<a href='/movies/about/" + movie.id + "'>"+data+"</a>";
+                    }
+                },
+                {
+                    data: "genreType.name"
+                }
+            ]
+        });
+    </script>
+    } 
+
